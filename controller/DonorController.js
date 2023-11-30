@@ -2,9 +2,32 @@ const express = require("express");
 const router = express.Router();
 const DonorService = require("../service/DonorService");
 
-router.post("/", async (req, res) => {
-  let result = await DonorService.addDonor();
-  res.send(result);
+router.post("/", async(req, res) => {
+  try {
+    const {
+      name, 
+      phoneNumber, 
+      address, 
+      dateOfBirth, 
+      gender, 
+      bloodType, 
+      medicalHistory
+    } = req.body
+    let result = await DonorService.addDonor({
+      name, 
+      phoneNumber, 
+      address, 
+      dateOfBirth, 
+      gender, 
+      bloodType, 
+      medicalHistory
+    });
+    res.send(result); 
+  } catch (error) {
+    console.error('Error adding donor:', error);
+    res.status(400).json(error);
+  }
+  
 });
 router.get("/", async (req, res) => {
   let result = await DonorService.getAllDonors();
