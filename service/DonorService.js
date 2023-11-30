@@ -99,5 +99,32 @@ exports.addDonor = async (data) => {
     throw error;
   }
 };
-exports.getAllDonors = () => ({ msg: "test all" });
+exports.getAllDonors = () => {
+  return new Promise((resolve, reject) => {
+    pool.query('SELECT * FROM donors',(err, results) => {
+      if(err){
+        reject(err)
+      }else{
+        if(results.length === 0){
+          resolve({
+            "success": false,
+            "message": "Donors not found"
+        })
+        }else{
+          const donorDetails = results.map((result)=> {
+            return {donorId: result.donor_id,
+            name: result.full_name,
+            phoneNumber: result.phone_number,
+            address: result.address,
+            dateOfBirth: result.date_of_birth,
+            gender: result.gender,
+            bloodType: result.blood_type,
+            medicalHistory: result.medical_history,}
+          })
+          resolve(donorDetails)
+        }
+      }
+    })
+  })
+};
 exports.getDonorById = () => ({ msg: "test" });
