@@ -127,4 +127,32 @@ exports.getAllDonors = () => {
     })
   })
 };
-exports.getDonorById = () => ({ msg: "test" });
+exports.getDonorById = (donorId) => {
+  return new Promise((resolve, reject) => {
+    pool.query('SELECT * FROM donors WHERE donor_id = ?', [donorId], (err,results)=> {
+      if(err){
+        reject(err)
+      }else{
+        if(results.length === 0){
+          resolve({
+            "success": false,
+            "message": `Donor not found with ID: ${donorId}`
+          })
+        }else{
+          const result =results[0]
+          const donorDetails = 
+            {donorId: result.donor_id,
+            name: result.full_name,
+            phoneNumber: result.phone_number,
+            address: result.address,
+            dateOfBirth: result.date_of_birth,
+            gender: result.gender,
+            bloodType: result.blood_type,
+            medicalHistory: result.medical_history,}
+            console.log(result)
+          resolve(donorDetails)
+        }
+        }
+      })
+  })
+};

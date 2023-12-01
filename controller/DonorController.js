@@ -34,7 +34,9 @@ router.get("/", async (req, res) => {
   res.send(result);
 });
 router.get("/:donorId", async (req, res) => {
-  let result = await DonorService.getDonorById();
+  const donorId = req.params.donorId;
+  console.log(donorId)
+  let result = await DonorService.getDonorById(donorId);
   res.send(result);
 });
 module.exports = router;
